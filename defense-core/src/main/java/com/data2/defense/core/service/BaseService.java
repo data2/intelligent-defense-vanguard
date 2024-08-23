@@ -10,4 +10,7 @@ public interface BaseService {
 
     boolean weakPassword();
 
+    boolean unauthorizedAccess();
+
+    boolean attack();
 }

@@ -40,5 +40,13 @@ public class PortScanService extends IpPortCheckerService implements BaseService
         return false;
     }
 
+    @Override
+    public boolean unauthorizedAccess() {
+        return false;
+    }
+    @Override
+    public boolean attack() {
+        return false;
+    }
 
 }

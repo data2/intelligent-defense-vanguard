@@ -38,4 +38,13 @@ public class JenkinsService extends ParentService implements BaseService {
         return false;
     }
 
+    @Override
+    public boolean unauthorizedAccess() {
+        return false;
+    }
+
+    @Override
+    public boolean attack() {
+        return false;
+    }
 }

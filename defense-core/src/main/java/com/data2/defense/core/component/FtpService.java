@@ -78,11 +78,21 @@ public class FtpService extends ParentService implements BaseService {
 
     }
 
+    @Override
+    public boolean unauthorizedAccess() {
+        return false;
+    }
+
     private static boolean login(FTPClient ftpClient, String username, String password) throws IOException {
         boolean success = ftpClient.login(username, password);
         if (!success) {
             ftpClient.logout(); // 尝试登录失败时登出，避免占用资源
         }
         return success;
+    }
+
+    @Override
+    public boolean attack() {
+        return false;
     }
 }
