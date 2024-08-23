@@ -18,11 +18,11 @@ public class PortScanService extends IpPortCheckerService implements BaseService
 
     @Override
     public boolean exists() {
-        int port = 1;
+        int port = 1024;
         while(port<PORT){
-            boolean open = super.isReachable(configuration.getIp(), PORT);
+            boolean open = super.isReachable(configuration.getIp(), port);
             if (open){
-                System.out.println("端口："+PORT+"已开放");
+                System.out.println("端口："+port+"已开放");
             }
             port += 1;
         }

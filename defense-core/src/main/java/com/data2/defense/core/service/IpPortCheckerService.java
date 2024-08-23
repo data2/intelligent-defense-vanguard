@@ -19,6 +19,7 @@ public class IpPortCheckerService {
             return true; // 如果连接成功，则认为IP和端口可通信
         } catch (IOException e) {
             // 连接失败，可能是因为网络问题、IP不存在、端口未开放等原因
+            System.out.println("端口："+port+"连接超时");
             return false;
         }
     }
