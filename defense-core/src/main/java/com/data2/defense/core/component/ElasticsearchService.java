@@ -1,12 +1,22 @@
 package com.data2.defense.core.component;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
+import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
+import co.elastic.clients.elasticsearch.indices.GetIndexResponse;
+import co.elastic.clients.json.JsonData;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.data2.defense.core.config.IpConfiguration;
 import com.data2.defense.core.service.BaseService;
 import com.data2.defense.core.service.ParentService;
-import org.elasticsearch.client.RestHighLevelClient;
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.message.BasicHeader;
+import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,11 +28,6 @@ public class ElasticsearchService extends ParentService implements BaseService {
     @Autowired
     private IpConfiguration configuration;
     private static final List<Integer> PORT = List.of(9200);
-
-    // 示例用户名和密码列表
-    private static final List<String> USERNAMES = Arrays.asList("root", "anonymous", "ftpuser", "admin");
-    private static final List<String> PASSWORDS = Arrays.asList("admin", "password", "root", "123456",
-            "12345678", "123456789", "12345", "ftpuser", "ftpuser123", "anonymous", "");
 
     @Override
     public boolean exists() {
@@ -39,28 +44,28 @@ public class ElasticsearchService extends ParentService implements BaseService {
     @Override
     public boolean unauthorizedAccess() {
         for (Integer port : PORT) {
-            // 创建客户端
-            try (RestHighLevelClient client = new RestHighLevelClient(
-                    RestClient.builder(new HttpHost(configuration.getIp(), port, "http")))) {
+            try{
+                // 创建低级客户端
+                RestClient restClient = RestClient.builder(
+                        new HttpHost(configuration.getIp(), 9200)
+                ).build();
 
-                // 列出所有索引
-                String[] indices = client.indices().getAlias(RequestOptions.DEFAULT).getAliases().keySet().toArray(new String[0]);
-                for (String index : indices) {
-                    System.out.println("Index: " + index);
+                // Create the transport with a Jackson mapper
+                ElasticsearchTransport transport = new RestClientTransport(
+                        restClient, new JacksonJsonpMapper());
 
-                    // 读取索引数据（这里以查询所有文档为例）
-                    SearchRequest searchRequest = new SearchRequest(index);
-                    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-                    searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-                    searchRequest.source(searchSourceBuilder);
+                // And create the API client
+                ElasticsearchClient esClient = new ElasticsearchClient(transport);
 
-                    SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-                    // 处理搜索结果...
-                    // 注意：这里只是简单地打印了响应的字符串表示，实际使用中你可能需要解析SearchResponse对象
-                    System.out.println(searchResponse.toString());
-                }
-                return true;
-            } catch (IOException e) {
+
+                GetIndexResponse response = esClient.indices().get(request -> request.index("*"));
+
+                System.out.println(response.result().keySet());
+
+                // Close the transport, freeing the underlying thread
+                transport.close();
+                restClient.close();
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }
@@ -69,6 +74,30 @@ public class ElasticsearchService extends ParentService implements BaseService {
 
     @Override
     public boolean attack() {
+        try{
+            // 创建低级客户端
+            RestClient restClient = RestClient.builder(
+                    new HttpHost(configuration.getIp(), 9200)
+            ).build();
+            // 使用Jackson映射器创建传输层
+            ElasticsearchTransport transport = new RestClientTransport(
+                    restClient, new JacksonJsonpMapper()
+            );
+            // 创建API客户端
+            ElasticsearchClient client = new ElasticsearchClient(transport);
+            // 创建索引
+            CreateIndexResponse createIndexResponse = client.indices().create(c -> c.index("user_test"));
+            // 响应状态
+            Boolean acknowledged = createIndexResponse.acknowledged();
+            System.out.println("索引操作 = " + acknowledged);
+
+            // 关闭ES客户端
+            transport.close();
+            restClient.close();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return false;
     }
 }

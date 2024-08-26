@@ -1,0 +1,5 @@
+/.idea/
+/defense-core/target/
+/defense-core/.mvn
+/defense-core/mvnw
+/defense-core/mvnw.cmd
