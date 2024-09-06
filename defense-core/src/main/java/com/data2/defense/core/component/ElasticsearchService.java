@@ -2,24 +2,18 @@ package com.data2.defense.core.component;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
-import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
 import co.elastic.clients.elasticsearch.indices.GetIndexResponse;
-import co.elastic.clients.json.JsonData;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.data2.defense.core.config.IpConfiguration;
 import com.data2.defense.core.service.BaseService;
 import com.data2.defense.core.service.ParentService;
-import org.apache.http.Header;
 import org.apache.http.HttpHost;
-import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -44,7 +38,7 @@ public class ElasticsearchService extends ParentService implements BaseService {
     @Override
     public boolean unauthorizedAccess() {
         for (Integer port : PORT) {
-            try{
+            try {
                 // 创建低级客户端
                 RestClient restClient = RestClient.builder(
                         new HttpHost(configuration.getIp(), 9200)
@@ -65,7 +59,7 @@ public class ElasticsearchService extends ParentService implements BaseService {
                 // Close the transport, freeing the underlying thread
                 transport.close();
                 restClient.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -74,7 +68,7 @@ public class ElasticsearchService extends ParentService implements BaseService {
 
     @Override
     public boolean attack() {
-        try{
+        try {
             // 创建低级客户端
             RestClient restClient = RestClient.builder(
                     new HttpHost(configuration.getIp(), 9200)
@@ -95,7 +89,7 @@ public class ElasticsearchService extends ParentService implements BaseService {
             transport.close();
             restClient.close();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

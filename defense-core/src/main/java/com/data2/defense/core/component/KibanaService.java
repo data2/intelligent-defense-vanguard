@@ -17,9 +17,9 @@ public class KibanaService extends ParentService implements BaseService {
     private static final List<Integer> PORT = List.of(5601);
 
     // 示例用户名和密码列表
-    private static final List<String> USERNAMES = Arrays.asList("root", "anonymous", "ftpuser","admin");
-    private static final List<String> PASSWORDS = Arrays.asList("admin", "password", "root","123456",
-            "12345678", "123456789", "12345","ftpuser","ftpuser123","anonymous","");
+    private static final List<String> USERNAMES = Arrays.asList("root", "anonymous", "ftpuser", "admin");
+    private static final List<String> PASSWORDS = Arrays.asList("admin", "password", "root", "123456",
+            "12345678", "123456789", "12345", "ftpuser", "ftpuser123", "anonymous", "");
 
     @Override
     public boolean exists() {
@@ -37,6 +37,7 @@ public class KibanaService extends ParentService implements BaseService {
     public boolean unauthorizedAccess() {
         return false;
     }
+
     @Override
     public boolean attack() {
         return false;

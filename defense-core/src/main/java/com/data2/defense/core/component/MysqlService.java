@@ -3,15 +3,10 @@ package com.data2.defense.core.component;
 import com.data2.defense.core.config.IpConfiguration;
 import com.data2.defense.core.dto.Pair;
 import com.data2.defense.core.service.BaseService;
-import com.data2.defense.core.service.IpPortCheckerService;
 import com.data2.defense.core.service.ParentService;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.method.ParameterErrors;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -28,9 +23,9 @@ public class MysqlService extends ParentService implements BaseService {
     private static final String url = "jdbc:mysql://localhost:3306/information_schema";
 
     // 示例用户名和密码列表
-    private static final List<String> USERNAMES = Arrays.asList("root", "anonymous", "ftpuser","admin");
-    private static final List<String> PASSWORDS = Arrays.asList("admin", "password", "root","123456",
-            "12345678", "123456789", "12345","ftpuser","ftpuser123","anonymous","");
+    private static final List<String> USERNAMES = Arrays.asList("root", "anonymous", "ftpuser", "admin");
+    private static final List<String> PASSWORDS = Arrays.asList("admin", "password", "root", "123456",
+            "12345678", "123456789", "12345", "ftpuser", "ftpuser123", "anonymous", "");
 
     @Override
     public boolean exists() {
@@ -43,7 +38,7 @@ public class MysqlService extends ParentService implements BaseService {
     public boolean weakPassword() {
         List<Pair> collection = super.getNamePwd(USERNAMES, PASSWORDS);
         for (Integer port : PORT) {
-            for (Pair pair : collection){
+            for (Pair pair : collection) {
                 try {
                     // 加载MySQL JDBC驱动
                     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -88,6 +83,7 @@ public class MysqlService extends ParentService implements BaseService {
     public boolean unauthorizedAccess() {
         return false;
     }
+
     @Override
     public boolean attack() {
         return false;

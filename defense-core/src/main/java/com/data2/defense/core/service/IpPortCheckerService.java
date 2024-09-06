@@ -22,7 +22,7 @@ public class IpPortCheckerService {
             return true; // 如果连接成功，则认为IP和端口可通信
         } catch (IOException e) {
             // 连接失败，可能是因为网络问题、IP不存在、端口未开放等原因
-            System.out.println("端口："+port+"连接超时");
+//            System.out.println("端口：" + port + "连接超时");
             return false;
         }
     }
@@ -30,7 +30,7 @@ public class IpPortCheckerService {
     /**
      * 检查指定的IP和端口是否可通信。
      *
-     * @param ip   要检查的IP地址
+     * @param ip    要检查的IP地址
      * @param ports 要检查的端口号
      * @return 如果IP和端口可通信，则返回true；否则返回false
      */

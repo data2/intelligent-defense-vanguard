@@ -3,7 +3,6 @@ package com.data2.defense.core.component;
 import com.data2.defense.core.config.IpConfiguration;
 import com.data2.defense.core.dto.Pair;
 import com.data2.defense.core.service.BaseService;
-import com.data2.defense.core.service.IpPortCheckerService;
 import com.data2.defense.core.service.ParentService;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;

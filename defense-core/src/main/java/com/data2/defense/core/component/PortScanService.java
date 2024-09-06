@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Consumer;
 
 @Component
 public class PortScanService extends IpPortCheckerService implements BaseService {
@@ -22,16 +19,16 @@ public class PortScanService extends IpPortCheckerService implements BaseService
     public boolean exists() {
         ArrayList<Integer> openPorts = new ArrayList<>();
         int port = 1024;
-        while(port<PORT){
+        while (port < PORT) {
             boolean open = super.isReachable(configuration.getIp(), port);
-            if (open){
+            if (open) {
                 openPorts.add(port);
-                System.out.println("端口："+port+"已开放");
+                System.out.println("端口：" + port + "已开放");
             }
             port += 1;
         }
 
-        openPorts.forEach(integer -> System.out.println("端口："+integer+"已开放"));
+        openPorts.forEach(integer -> System.out.println("端口：" + integer + "已开放"));
         return false;
     }
 
@@ -44,6 +41,7 @@ public class PortScanService extends IpPortCheckerService implements BaseService
     public boolean unauthorizedAccess() {
         return false;
     }
+
     @Override
     public boolean attack() {
         return false;
